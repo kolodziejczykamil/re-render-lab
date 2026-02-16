@@ -36,3 +36,7 @@ next-env.d.ts
 
 # husky
 .husky/_/
+
+# test files (excluded from build)
+coverage/
+.vitest/
