@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card-bg: #1e293b;
+  --card-border: #334155;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+* {
+  @apply border-gray-700;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-indigo-500;
+}
