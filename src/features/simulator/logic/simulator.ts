@@ -25,7 +25,7 @@ export function simulateRenders(
     let avoidable = false;
     let reason = '';
     // Deterministic duration based on event type and index
-    const baseDuration = event.type === 'initial' ? 0 : event.type === 'effect' ? 80 : 120;
+    const baseDuration = event.type === 'effect' ? 80 : 120;
     const duration = baseDuration + (renderId * 5); // Deterministic variation
 
     switch (event.type) {

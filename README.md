@@ -17,7 +17,49 @@ A production-grade web application for visualizing and understanding React compo
 - **Next.js 14** (App Router)
 - **TypeScript** (strict mode)
 - **Tailwind CSS**
+- **Vitest** (testing)
+- **Husky** (git hooks)
 - **Feature-based architecture**
+
+## Getting Started
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Run the development server:
+```bash
+npm run dev
+```
+
+3. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run lint:fix` - Fix ESLint errors
+- `npm run type-check` - Run TypeScript type checking
+- `npm run test` - Run tests
+- `npm run test:watch` - Run tests in watch mode
+- `npm run test:coverage` - Run tests with coverage
+
+### Git Hooks
+
+This project uses Husky for git hooks:
+
+- **pre-commit**: Runs type-check, lint, and tests before committing
+- **pre-push**: Runs build before pushing
+
+To set up Husky:
+```bash
+npm run prepare
+```
 
 ## Project Structure
 
@@ -35,48 +77,31 @@ src/
       hooks/              # React hooks (useSimulator)
       rules/              # Optimization rules engine
   lib/                    # Shared utilities
+  test/                   # Test setup
 ```
 
-## Getting Started
+## Testing
 
-1. Install dependencies:
+Tests are written with Vitest and React Testing Library. Run tests with:
+
 ```bash
-npm install
+npm run test
 ```
 
-2. Run the development server:
+## Deployment
+
+The application is ready for deployment on platforms like Vercel, Netlify, or any Node.js hosting service.
+
+### Build for Production
+
 ```bash
-npm run dev
+npm run build
+npm run start
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser
+### Environment Variables
 
-## How It Works
-
-### Static Analysis
-
-The `analyzeComponent` function performs static code analysis to detect:
-- Inline arrow functions in JSX
-- Inline object literals in JSX
-- useEffect hooks with/without dependency arrays
-- React.memo usage
-- State hooks (useState) and their names
-
-### Simulation Engine
-
-The `simulateRenders` function uses heuristic rules to simulate renders:
-- Initial render always occurs
-- Prop changes trigger expected renders
-- State changes trigger expected renders
-- Parent re-renders are avoidable if component is not memoized
-- Effects without dependencies are marked as avoidable
-
-### Optimization Rules
-
-The rules engine generates suggestions based on:
-- Component analysis results
-- Render event patterns
-- Performance metrics
+No environment variables are required for basic functionality.
 
 ## Code Quality
 
@@ -85,6 +110,9 @@ The rules engine generates suggestions based on:
 - ✅ Pure logic separation (no React in logic files)
 - ✅ No console.logs
 - ✅ Production-ready code
+- ✅ Comprehensive test coverage
+- ✅ ESLint + Prettier configured
+- ✅ Husky git hooks
 
 ## License
 
