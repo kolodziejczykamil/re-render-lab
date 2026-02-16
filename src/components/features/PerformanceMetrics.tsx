@@ -30,9 +30,9 @@ export function PerformanceMetricsComponent({ metrics }: PerformanceMetricsProps
   return (
     <Card title="Performance Metrics">
       <div className="grid grid-cols-2 gap-4">
-        <div className="p-4 bg-slate-700/50 rounded-lg border border-slate-600">
-          <div className="text-sm text-slate-400 mb-1">Total Renders</div>
-          <div className="text-2xl font-bold text-white mb-1">{metrics.totalRenders}</div>
+        <div className="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600 transition-colors">
+          <div className="text-sm text-slate-600 dark:text-slate-400 mb-1 transition-colors">Total Renders</div>
+          <div className="text-2xl font-bold text-slate-900 dark:text-white mb-1 transition-colors">{metrics.totalRenders}</div>
           {avoidablePercentage > 0 && (
             <div className="text-xs text-yellow-400 flex items-center gap-1">
               <span>↑</span>
@@ -41,18 +41,18 @@ export function PerformanceMetricsComponent({ metrics }: PerformanceMetricsProps
           )}
         </div>
 
-        <div className="p-4 bg-slate-700/50 rounded-lg border border-slate-600">
-          <div className="text-sm text-slate-400 mb-1">Avg Render Time</div>
-          <div className="text-2xl font-bold text-white mb-1">{metrics.avgDuration}ms</div>
+        <div className="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600 transition-colors">
+          <div className="text-sm text-slate-600 dark:text-slate-400 mb-1 transition-colors">Avg Render Time</div>
+          <div className="text-2xl font-bold text-slate-900 dark:text-white mb-1 transition-colors">{metrics.avgDuration}ms</div>
           <div className="text-xs text-green-400 flex items-center gap-1">
             <span>✓</span>
             <span>{metrics.avgDuration < 200 ? 'Within target' : 'Slow'}</span>
           </div>
         </div>
 
-        <div className="p-4 bg-slate-700/50 rounded-lg border border-slate-600">
-          <div className="text-sm text-slate-400 mb-1">Wasted Renders</div>
-          <div className="text-2xl font-bold text-white mb-1">{metrics.avoidableRenders}</div>
+        <div className="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600 transition-colors">
+          <div className="text-sm text-slate-600 dark:text-slate-400 mb-1 transition-colors">Wasted Renders</div>
+          <div className="text-2xl font-bold text-slate-900 dark:text-white mb-1 transition-colors">{metrics.avoidableRenders}</div>
           {metrics.avoidableRenders > 0 ? (
             <div className="text-xs text-yellow-400 flex items-center gap-1">
               <span>⚠</span>
@@ -66,8 +66,8 @@ export function PerformanceMetricsComponent({ metrics }: PerformanceMetricsProps
           )}
         </div>
 
-        <div className="p-4 bg-slate-700/50 rounded-lg border border-slate-600">
-          <div className="text-sm text-slate-400 mb-1">Optimization Score</div>
+        <div className="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600 transition-colors">
+          <div className="text-sm text-slate-600 dark:text-slate-400 mb-1 transition-colors">Optimization Score</div>
           <div className={`text-2xl font-bold mb-1 ${getScoreColor(metrics.optimizationScore)}`}>
             {metrics.optimizationScore}/100
           </div>

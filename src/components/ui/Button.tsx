@@ -27,9 +27,11 @@ export function Button({
     lg: 'px-6 py-3 text-lg',
   };
 
+  const disabledStyles = props.disabled ? 'opacity-50 cursor-not-allowed' : '';
+
   return (
     <button
-      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${disabledStyles} ${className}`}
       {...props}
     >
       {children}

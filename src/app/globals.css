@@ -3,21 +3,29 @@
 @tailwind utilities;
 
 :root {
+  --background: #ffffff;
+  --foreground: #1e293b;
+  --card-bg: #f8fafc;
+  --card-border: #e2e8f0;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+}
+
+.dark {
   --background: #0f172a;
   --foreground: #f1f5f9;
   --card-bg: #1e293b;
   --card-border: #334155;
-  --primary: #6366f1;
-  --primary-hover: #4f46e5;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
+  transition: background-color 0.2s, color 0.2s;
 }
 
 * {
-  @apply border-gray-700;
+  @apply border-slate-300 dark:border-slate-700;
 }
 
 /* Focus styles for accessibility */

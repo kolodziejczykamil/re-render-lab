@@ -10,6 +10,8 @@ interface ComponentCodeEditorProps {
   isValid: boolean;
   validationError?: string;
   onSimulate: () => void;
+  hasScenarios: boolean;
+  isSimulating?: boolean;
 }
 
 export function ComponentCodeEditor({
@@ -18,15 +20,17 @@ export function ComponentCodeEditor({
   isValid,
   validationError,
   onSimulate,
+  hasScenarios,
+  isSimulating = false,
 }: ComponentCodeEditorProps) {
   return (
     <Card title="</> Component Code">
       <div className="mb-4">
-        <div className="text-sm text-slate-400 mb-2" aria-label="File name">UserCard.jsx</div>
+        <div className="text-sm text-slate-600 dark:text-slate-400 mb-2 transition-colors" aria-label="File name">UserCard.jsx</div>
         <textarea
           value={code}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full h-64 bg-slate-900 text-slate-100 font-mono text-sm p-4 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+          className="w-full h-64 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-mono text-sm p-4 rounded-lg border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none transition-colors"
           placeholder="Enter your React component code here..."
           aria-label="Component code editor"
         />
@@ -37,19 +41,33 @@ export function ComponentCodeEditor({
           {isValid ? (
             <>
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span className="text-sm text-green-400">Valid React Component</span>
+              <span className="text-sm text-green-600 dark:text-green-400 transition-colors">Valid React Component</span>
             </>
           ) : (
             <>
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              <span className="text-sm text-red-400">{validationError || 'Invalid component'}</span>
+              <span className="text-sm text-red-600 dark:text-red-400 transition-colors">{validationError || 'Invalid component'}</span>
             </>
           )}
         </div>
-        <Button onClick={onSimulate} size="lg" aria-label="Run simulation">
+        <Button 
+          onClick={onSimulate} 
+          size="lg" 
+          aria-label="Run simulation"
+          disabled={!isValid || !hasScenarios || isSimulating}
+        >
           <span className="flex items-center gap-2">
-            <span>▶</span>
-            <span>Simulate Re-renders</span>
+            {isSimulating ? (
+              <>
+                <span className="animate-spin">⏳</span>
+                <span>Simulating...</span>
+              </>
+            ) : (
+              <>
+                <span>▶</span>
+                <span>Simulate Re-renders</span>
+              </>
+            )}
           </span>
         </Button>
       </div>

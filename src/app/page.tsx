@@ -37,6 +37,7 @@ export default function Home() {
               isValid={simulator.analysis.isValid}
               validationError={simulator.analysis.validationError}
               onSimulate={handleSimulate}
+              hasScenarios={simulator.scenarios.length > 0}
             />
             <ScenarioBuilder
               scenarios={simulator.scenarios}
@@ -66,34 +67,34 @@ export default function Home() {
       {/* SEO Content Section */}
       <section className="container mx-auto px-6 py-12 max-w-4xl">
         <article>
-          <h2 className="text-3xl font-bold text-white mb-6">Why React Components Re-render</h2>
-          <p className="text-slate-300 mb-4">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6 transition-colors">Why React Components Re-render</h2>
+          <p className="text-slate-700 dark:text-slate-300 mb-4 transition-colors">
             React components re-render when their state or props change, or when their parent component re-renders. 
             Understanding when and why re-renders occur is crucial for building performant React applications.
           </p>
-          <p className="text-slate-300 mb-8">
+          <p className="text-slate-700 dark:text-slate-300 mb-8 transition-colors">
             Common causes of re-renders include state updates, prop changes, parent re-renders, and context updates. 
             While some re-renders are necessary and expected, others can be avoided through proper optimization techniques.
           </p>
 
-          <h2 className="text-3xl font-bold text-white mb-6 mt-12">How This Simulator Works</h2>
-          <p className="text-slate-300 mb-4">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6 mt-12 transition-colors">How This Simulator Works</h2>
+          <p className="text-slate-700 dark:text-slate-300 mb-4 transition-colors">
             This React Re-render Simulator uses static code analysis and rule-based heuristics to simulate component 
             re-renders. It analyzes your component code to detect patterns like inline functions, inline objects, 
             missing memoization, and improper useEffect dependencies.
           </p>
-          <p className="text-slate-300 mb-4">
+          <p className="text-slate-700 dark:text-slate-300 mb-4 transition-colors">
             The simulator is not a real React runtime—it uses deterministic rules to predict when re-renders would 
             occur based on your code structure and the scenarios you configure. This makes it a powerful learning and 
             optimization tool.
           </p>
-          <p className="text-slate-300 mb-8">
+          <p className="text-slate-700 dark:text-slate-300 mb-8 transition-colors">
             By visualizing render events and receiving optimization suggestions, you can learn React performance best 
             practices and identify potential issues before they impact your application.
           </p>
 
-          <h2 className="text-3xl font-bold text-white mb-6 mt-12">Common React Performance Mistakes</h2>
-          <ul className="list-disc list-inside text-slate-300 space-y-2 mb-8">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6 mt-12 transition-colors">Common React Performance Mistakes</h2>
+          <ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-2 mb-8 transition-colors">
             <li>Creating inline arrow functions in JSX props, causing child components to re-render unnecessarily</li>
             <li>Creating inline object or array literals in props, creating new references on every render</li>
             <li>Not using React.memo for components that receive stable props but re-render due to parent updates</li>
@@ -102,32 +103,32 @@ export default function Home() {
             <li>Not using useCallback or useMemo for expensive computations or function references</li>
           </ul>
 
-          <h2 className="text-3xl font-bold text-white mb-6 mt-12">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6 mt-12 transition-colors">Frequently Asked Questions</h2>
           <div className="space-y-6 mb-8">
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">Is this a real React runtime?</h3>
-              <p className="text-slate-300">
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 transition-colors">Is this a real React runtime?</h3>
+              <p className="text-slate-700 dark:text-slate-300 transition-colors">
                 No, this simulator uses static analysis and rule-based heuristics to predict re-renders. 
                 It&apos;s designed for learning and optimization, not for running actual React code.
               </p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">How accurate are the simulations?</h3>
-              <p className="text-slate-300">
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 transition-colors">How accurate are the simulations?</h3>
+              <p className="text-slate-700 dark:text-slate-300 transition-colors">
                 The simulations are based on well-established React patterns and best practices. While they provide 
                 accurate predictions for common scenarios, actual React behavior may vary in edge cases.
               </p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">Can I use this in production?</h3>
-              <p className="text-slate-300">
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 transition-colors">Can I use this in production?</h3>
+              <p className="text-slate-700 dark:text-slate-300 transition-colors">
                 This tool is designed for development and learning purposes. Use it to understand React re-render 
                 patterns and optimize your components before deploying to production.
               </p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">What makes a render &quot;avoidable&quot;?</h3>
-              <p className="text-slate-300">
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 transition-colors">What makes a render &quot;avoidable&quot;?</h3>
+              <p className="text-slate-700 dark:text-slate-300 transition-colors">
                 A render is considered avoidable if it could be prevented through optimization techniques like 
                 React.memo, useCallback, useMemo, or proper dependency management in useEffect hooks.
               </p>

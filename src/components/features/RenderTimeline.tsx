@@ -71,7 +71,7 @@ export function RenderTimeline({ events, highlightAvoidable }: RenderTimelinePro
     >
       <div className="space-y-4" role="log" aria-live="polite" aria-label="Render timeline">
         {events.length === 0 ? (
-          <div className="text-center py-8 text-slate-500">
+          <div className="text-center py-8 text-slate-600 dark:text-slate-500 transition-colors">
             Run simulation to see render timeline
           </div>
         ) : (
@@ -80,10 +80,10 @@ export function RenderTimeline({ events, highlightAvoidable }: RenderTimelinePro
             return (
               <div
                 key={event.id}
-                className={`p-4 rounded-lg border ${
+                className={`p-4 rounded-lg border transition-colors ${
                   shouldHighlight
                     ? 'bg-yellow-500/10 border-yellow-500/30'
-                    : 'bg-slate-700/50 border-slate-600'
+                    : 'bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600'
                 }`}
                 role="article"
                 aria-label={`Render event ${event.id}: ${event.reason}`}
@@ -96,7 +96,7 @@ export function RenderTimeline({ events, highlightAvoidable }: RenderTimelinePro
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-semibold text-white">
+                      <h3 className="font-semibold text-slate-900 dark:text-white transition-colors">
                         Render #{event.id} - {event.type === 'initial' ? 'Initial Mount' : event.type === 'prop' ? 'Prop Change' : event.type === 'state' ? 'State Update' : event.type === 'parent' ? 'Parent Re-render' : 'Effect Execution'}
                       </h3>
                       <span
@@ -108,8 +108,8 @@ export function RenderTimeline({ events, highlightAvoidable }: RenderTimelinePro
                         {getStatusLabel(event.type, event.avoidable)}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-300 mb-2">{getEventDescription(event)}</p>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-sm text-slate-700 dark:text-slate-300 mb-2 transition-colors">{getEventDescription(event)}</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 transition-colors">
                       {event.timestamp}ms • Duration: {event.duration}ms
                     </p>
                   </div>

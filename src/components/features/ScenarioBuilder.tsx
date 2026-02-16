@@ -42,9 +42,9 @@ export function ScenarioBuilder({
         {scenarios.map((scenario, index) => (
           <div
             key={scenario.id}
-            className="flex items-center gap-3 p-3 bg-slate-700 rounded-lg"
+            className="flex items-center gap-3 p-3 bg-slate-100 dark:bg-slate-700 rounded-lg transition-colors"
           >
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-600 text-white text-sm font-medium">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-300 dark:bg-slate-600 text-slate-900 dark:text-white text-sm font-medium transition-colors">
               {index + 1}
             </div>
             <Select
@@ -83,7 +83,7 @@ export function ScenarioBuilder({
           </div>
         ))}
         {scenarios.length === 0 && (
-          <div className="text-center py-8 text-slate-500">
+          <div className="text-center py-8 text-slate-600 dark:text-slate-500 transition-colors">
             No scenarios configured. Click &quot;+ Add Change&quot; to add one.
           </div>
         )}
@@ -91,7 +91,7 @@ export function ScenarioBuilder({
 
       {scenarios.length > 0 && (
         <div className="mt-4 pt-4 border-t border-slate-700 flex items-center justify-between">
-          <span className="text-sm text-slate-400">
+          <span className="text-sm text-slate-600 dark:text-slate-400 transition-colors">
             {scenarios.length} scenario{scenarios.length !== 1 ? 's' : ''} configured
           </span>
           <button

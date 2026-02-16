@@ -24,32 +24,32 @@ export function OptimizationSuggestions({ suggestions }: OptimizationSuggestions
     <Card title="Optimization Suggestions">
       <div className="space-y-4">
         {suggestions.length === 0 ? (
-          <div className="text-center py-8 text-slate-500">
+          <div className="text-center py-8 text-slate-600 dark:text-slate-500 transition-colors">
             No optimization suggestions available
           </div>
         ) : (
           suggestions.map((suggestion) => (
             <div
               key={suggestion.id}
-              className="p-4 bg-slate-700/50 rounded-lg border border-slate-600"
+              className="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600 transition-colors"
             >
               <div className="flex items-start justify-between mb-2">
-                <h3 className="font-semibold text-white">{suggestion.id}. {suggestion.title}</h3>
+                <h3 className="font-semibold text-slate-900 dark:text-white transition-colors">{suggestion.id}. {suggestion.title}</h3>
                 <span
                   className={`px-2 py-1 rounded text-xs border ${getImpactColor(suggestion.impact)}`}
                 >
                   Impact: {suggestion.impact}
                 </span>
               </div>
-              <p className="text-sm text-slate-300 mb-2">{suggestion.description}</p>
-              <p className="text-xs text-slate-400 mb-2">
+              <p className="text-sm text-slate-700 dark:text-slate-300 mb-2 transition-colors">{suggestion.description}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2 transition-colors">
                 <strong>Recommendation:</strong> {suggestion.recommendation}
               </p>
               <div className="flex flex-wrap gap-2">
                 {suggestion.keywords.map((keyword) => (
                   <span
                     key={keyword}
-                    className="px-2 py-1 bg-slate-600 rounded text-xs text-slate-300"
+                    className="px-2 py-1 bg-slate-200 dark:bg-slate-600 rounded text-xs text-slate-700 dark:text-slate-300 transition-colors"
                   >
                     {keyword}
                   </span>

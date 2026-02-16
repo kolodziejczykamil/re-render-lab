@@ -90,7 +90,7 @@ npm run test
 
 ## Deployment
 
-The application is ready for deployment on platforms like Vercel, Netlify, or any Node.js hosting service.
+The application is optimized for deployment on Vercel.
 
 ### Build for Production
 
@@ -99,9 +99,12 @@ npm run build
 npm run start
 ```
 
-### Environment Variables
+### Vercel Deployment
 
-No environment variables are required for basic functionality.
+1. Push your code to GitHub
+2. Import your repository in Vercel
+3. Vercel will automatically detect Next.js and configure the build
+4. No environment variables are required for basic functionality
 
 ## Code Quality
 

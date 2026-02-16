@@ -45,11 +45,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <StructuredData />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const stored = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const shouldBeDark = stored ? stored === 'dark' : prefersDark;
+                if (shouldBeDark) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              })();
+            `,
+          }}
+        />
       </head>
-      <body className="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+      <body className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors">
         {children}
       </body>
     </html>

@@ -75,23 +75,25 @@ export function simulateRenders(
     }
 
     // Only add render event if it's not a memoized parent re-render
-    if (event.type === 'parent' && componentAnalysis.hasReactMemo && !avoidable) {
-      // Skip adding render event for memoized components when parent re-renders
-      // They don't re-render, so no event is added
-    } else {
-      renderEvents.push({
-        id: renderId++,
-        type: event.type === 'prop' ? 'prop' : event.type === 'state' ? 'state' : event.type === 'parent' ? 'parent' : 'effect',
-        avoidable,
-        duration: Math.round(duration),
-        reason,
-        timestamp: currentTime,
-        props: event.type === 'prop' && event.key ? { [event.key]: 'changed' } : undefined,
-        state: event.type === 'state' && event.key ? { [event.key]: 'updated' } : undefined,
-      });
-      
-      currentTime += duration + 50; // Add delay between events
+    // Memoized components don't re-render when parent re-renders (unless props change)
+    if (event.type === 'parent' && componentAnalysis.hasReactMemo) {
+      // Skip adding render event - memoized component doesn't re-render
+      continue;
     }
+
+    // Add render event for all other cases
+    renderEvents.push({
+      id: renderId++,
+      type: event.type === 'prop' ? 'prop' : event.type === 'state' ? 'state' : event.type === 'parent' ? 'parent' : 'effect',
+      avoidable,
+      duration: Math.round(duration),
+      reason,
+      timestamp: currentTime,
+      props: event.type === 'prop' && event.key ? { [event.key]: 'changed' } : undefined,
+      state: event.type === 'state' && event.key ? { [event.key]: 'updated' } : undefined,
+    });
+    
+    currentTime += duration + 50; // Add delay between events
 
   }
 

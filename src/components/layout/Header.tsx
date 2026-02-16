@@ -1,29 +1,85 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect, useCallback } from 'react';
 
 export function Header() {
+  const [isDark, setIsDark] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // Check system preference or localStorage
+    const stored = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const shouldBeDark = stored ? stored === 'dark' : prefersDark;
+    setIsDark(shouldBeDark);
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    setIsDark((prev) => {
+      const newIsDark = !prev;
+      
+      // Update DOM immediately
+      const html = document.documentElement;
+      if (newIsDark) {
+        html.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
+      }
+      
+      // Save to localStorage
+      localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
+      
+      return newIsDark;
+    });
+  }, []);
+
+  if (!mounted) {
+    return (
+      <header className="border-b border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 transition-colors">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="text-2xl">⚛️</div>
+              <div>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white transition-colors">React Re-render Simulator</h1>
+                <p className="text-sm text-slate-600 dark:text-slate-400 transition-colors">Visualize component lifecycle</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
+
   return (
-    <header className="border-b border-slate-700 bg-slate-900">
+    <header className="border-b border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 transition-colors">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="text-2xl">⚛️</div>
             <div>
-              <h1 className="text-2xl font-bold text-white">React Re-render Simulator</h1>
-              <p className="text-sm text-slate-400">Visualize component lifecycle</p>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white transition-colors">React Re-render Simulator</h1>
+              <p className="text-sm text-slate-600 dark:text-slate-400 transition-colors">Visualize component lifecycle</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <button 
-              className="text-slate-400 hover:text-white transition-colors"
-              aria-label="Toggle dark mode"
+              onClick={toggleTheme}
+              className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+              aria-label="Toggle theme"
+              type="button"
             >
-              🌙
+              {isDark ? '🌙' : '☀️'}
             </button>
             <a
-              href="https://github.com"
+              href="https://github.com/kamilkolodziejczyk/re-render-lab"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-400 hover:text-white transition-colors"
+              className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
               aria-label="View on GitHub"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

@@ -25,7 +25,7 @@ export function SimulationSettingsComponent({
     <Card title="Simulation Settings">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm text-slate-300 mb-2">Animation Speed</label>
+          <label className="block text-sm text-slate-700 dark:text-slate-300 mb-2 transition-colors">Animation Speed</label>
           <Select
             options={speedOptions}
             value={settings.animationSpeed}
