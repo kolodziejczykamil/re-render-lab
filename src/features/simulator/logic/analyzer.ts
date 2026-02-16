@@ -48,41 +48,40 @@ export function analyzeComponent(code: string): ComponentAnalysis {
       traverse(ast, {
         // Detect React.memo and useEffect hooks
         CallExpression(path: unknown) {
-          const { node } = path as { node: { callee: unknown; arguments: unknown[] } };
-          if (
-            t.isIdentifier(node.callee) &&
-            (node.callee.name === 'memo' || node.callee.name === 'React.memo')
-          ) {
+          const pathNode = path as { node: { callee: unknown; arguments: unknown[] } };
+          const callee = pathNode.node.callee;
+          const args = pathNode.node.arguments;
+          
+          // Check for React.memo
+          if (t.isIdentifier(callee as never) && (callee as { name: string }).name === 'memo') {
             analysis.hasReactMemo = true;
           }
           if (
-            t.isMemberExpression(node.callee) &&
-            t.isIdentifier(node.callee.object) &&
-            node.callee.object.name === 'React' &&
-            t.isIdentifier(node.callee.property) &&
-            node.callee.property.name === 'memo'
+            t.isMemberExpression(callee as never) &&
+            t.isIdentifier((callee as { object: unknown }).object as never) &&
+            ((callee as { object: { name: string } }).object.name === 'React') &&
+            t.isIdentifier((callee as { property: unknown }).property as never) &&
+            ((callee as { property: { name: string } }).property.name === 'memo')
           ) {
             analysis.hasReactMemo = true;
           }
           
           // Detect useEffect hooks
-          if (
-            t.isIdentifier(node.callee) &&
-            node.callee.name === 'useEffect'
-          ) {
-            if (node.arguments.length === 1) {
+          if (t.isIdentifier(callee as never) && (callee as { name: string }).name === 'useEffect') {
+            if (args.length === 1) {
               // useEffect(() => {}) - no dependency array
               analysis.hasUseEffectWithoutDeps = true;
-            } else if (node.arguments.length === 2) {
+            } else if (args.length === 2) {
               // useEffect(() => {}, [])
-              const depsArg = node.arguments[1];
-              if (t.isArrayExpression(depsArg)) {
+              const depsArg = args[1];
+              if (t.isArrayExpression(depsArg as never)) {
                 analysis.hasUseEffectWithDeps = true;
-                depsArg.elements.forEach((element: unknown) => {
-                  if (t.isIdentifier(element)) {
-                    analysis.useEffectDeps.push(element.name);
-                  } else if (t.isStringLiteral(element)) {
-                    analysis.useEffectDeps.push(element.value);
+                const depsArray = depsArg as { elements: unknown[] };
+                depsArray.elements.forEach((element: unknown) => {
+                  if (t.isIdentifier(element as never)) {
+                    analysis.useEffectDeps.push((element as { name: string }).name);
+                  } else if (t.isStringLiteral(element as never)) {
+                    analysis.useEffectDeps.push((element as { value: string }).value);
                   }
                 });
               } else {
@@ -95,15 +94,16 @@ export function analyzeComponent(code: string): ComponentAnalysis {
         // Detect function component declaration and props destructuring
         FunctionDeclaration(path: unknown) {
           const pathNode = path as { node: { id: unknown; params: unknown[] } };
-          if (pathNode.node.id && t.isIdentifier(pathNode.node.id)) {
-            analysis.componentName = pathNode.node.id.name;
+          const nodeId = pathNode.node.id;
+          if (nodeId && t.isIdentifier(nodeId as never)) {
+            analysis.componentName = (nodeId as { name: string }).name;
             analysis.isValid = true;
           }
           
           // Detect props destructuring
           if (pathNode.node.params.length > 0) {
             const firstParam = pathNode.node.params[0];
-            if (t.isObjectPattern(firstParam)) {
+            if (t.isObjectPattern(firstParam as never)) {
               analysis.hasPropsDestructuring = true;
             }
           }
@@ -111,27 +111,30 @@ export function analyzeComponent(code: string): ComponentAnalysis {
 
         VariableDeclarator(path: unknown) {
           const pathNode = path as { node: { id: unknown; init: unknown } };
+          const nodeId = pathNode.node.id;
+          const nodeInit = pathNode.node.init;
+          
           // Detect const Component = () => {} or const Component = function() {}
           if (
-            t.isIdentifier(pathNode.node.id) &&
-            (t.isArrowFunctionExpression(pathNode.node.init) ||
-              t.isFunctionExpression(pathNode.node.init))
+            t.isIdentifier(nodeId as never) &&
+            (t.isArrowFunctionExpression(nodeInit as never) ||
+              t.isFunctionExpression(nodeInit as never))
           ) {
-            analysis.componentName = pathNode.node.id.name;
+            analysis.componentName = (nodeId as { name: string }).name;
             analysis.isValid = true;
           }
 
           // Detect useState hooks
           if (
-            t.isCallExpression(pathNode.node.init) &&
-            t.isIdentifier(pathNode.node.init.callee) &&
-            pathNode.node.init.callee.name === 'useState'
+            t.isCallExpression(nodeInit as never) &&
+            t.isIdentifier((nodeInit as { callee: unknown }).callee as never) &&
+            ((nodeInit as { callee: { name: string } }).callee.name === 'useState')
           ) {
             analysis.stateHooksCount++;
-            if (t.isArrayPattern(pathNode.node.id) && pathNode.node.id.elements[0]) {
-              const firstElement = pathNode.node.id.elements[0];
-              if (t.isIdentifier(firstElement)) {
-                analysis.stateHookNames.push(firstElement.name);
+            if (t.isArrayPattern(nodeId as never) && (nodeId as { elements: unknown[] }).elements[0]) {
+              const firstElement = (nodeId as { elements: unknown[] }).elements[0];
+              if (t.isIdentifier(firstElement as never)) {
+                analysis.stateHookNames.push((firstElement as { name: string }).name);
               }
             }
           }
@@ -141,7 +144,7 @@ export function analyzeComponent(code: string): ComponentAnalysis {
           const pathNode = path as { node: { params: unknown[] } };
           if (pathNode.node.params.length > 0) {
             const firstParam = pathNode.node.params[0];
-            if (t.isObjectPattern(firstParam)) {
+            if (t.isObjectPattern(firstParam as never)) {
               analysis.hasPropsDestructuring = true;
             }
           }
@@ -150,13 +153,14 @@ export function analyzeComponent(code: string): ComponentAnalysis {
         // Detect inline arrow functions, objects, and arrays in JSX
         JSXExpressionContainer(path: unknown) {
           const pathNode = path as { node: { expression: unknown } };
-          if (t.isArrowFunctionExpression(pathNode.node.expression)) {
+          const expression = pathNode.node.expression;
+          if (t.isArrowFunctionExpression(expression as never)) {
             analysis.hasInlineArrowFunctions = true;
           }
-          if (t.isObjectExpression(pathNode.node.expression)) {
+          if (t.isObjectExpression(expression as never)) {
             analysis.hasInlineObjectLiterals = true;
           }
-          if (t.isArrayExpression(pathNode.node.expression)) {
+          if (t.isArrayExpression(expression as never)) {
             analysis.hasInlineArrayLiterals = true;
           }
         },
