@@ -7,12 +7,10 @@ let t: typeof import('@babel/types') | null = null;
 
 try {
   // Dynamic require for optional Babel dependencies
-  // @ts-expect-error - Babel may not be installed
-  parser = require('@babel/parser');
-  // @ts-expect-error - Babel may not be installed
-  traverse = require('@babel/traverse').default;
-  // @ts-expect-error - Babel may not be installed
-  t = require('@babel/types');
+  // Using type assertion since these are optional dependencies
+  parser = require('@babel/parser') as typeof import('@babel/parser');
+  traverse = require('@babel/traverse').default as typeof import('@babel/traverse').default;
+  t = require('@babel/types') as typeof import('@babel/types');
 } catch {
   // Babel not available, will use regex fallback
 }
