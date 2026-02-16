@@ -6,11 +6,12 @@ let traverse: typeof import('@babel/traverse').default | null = null;
 let t: typeof import('@babel/types') | null = null;
 
 try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  // Dynamic require for optional Babel dependencies
+  // @ts-expect-error - Babel may not be installed
   parser = require('@babel/parser');
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  // @ts-expect-error - Babel may not be installed
   traverse = require('@babel/traverse').default;
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  // @ts-expect-error - Babel may not be installed
   t = require('@babel/types');
 } catch {
   // Babel not available, will use regex fallback
