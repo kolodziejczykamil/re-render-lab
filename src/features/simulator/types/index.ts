@@ -23,12 +23,15 @@ export interface RenderEvent {
 export interface ComponentAnalysis {
   hasInlineArrowFunctions: boolean;
   hasInlineObjectLiterals: boolean;
+  hasInlineArrayLiterals: boolean;
   hasUseEffectWithoutDeps: boolean;
   hasUseEffectWithDeps: boolean;
   useEffectDeps: string[];
   hasReactMemo: boolean;
   stateHooksCount: number;
   stateHookNames: string[];
+  componentName?: string;
+  hasPropsDestructuring: boolean;
   isValid: boolean;
   validationError?: string;
 }

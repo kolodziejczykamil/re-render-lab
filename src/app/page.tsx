@@ -14,7 +14,7 @@ import { useSimulator } from '@/features/simulator/hooks/useSimulator';
 export default function Home() {
   const simulator = useSimulator();
 
-  const handleSimulate = () => {
+  const handleSimulate = async () => {
     if (!simulator.analysis.isValid) {
       return;
     }
@@ -22,6 +22,7 @@ export default function Home() {
       // Auto-add initial render scenario if none exist
       simulator.addScenario('prop', 'name', 'Initial prop change');
     }
+    await simulator.simulate();
   };
 
   return (
@@ -38,6 +39,7 @@ export default function Home() {
               validationError={simulator.analysis.validationError}
               onSimulate={handleSimulate}
               hasScenarios={simulator.scenarios.length > 0}
+              isSimulating={simulator.isSimulating}
             />
             <ScenarioBuilder
               scenarios={simulator.scenarios}
@@ -67,7 +69,7 @@ export default function Home() {
       {/* SEO Content Section */}
       <section className="container mx-auto px-6 py-12 max-w-4xl">
         <article>
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6 transition-colors">Why React Components Re-render</h2>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6 transition-colors">What Causes React Components to Re-render?</h2>
           <p className="text-slate-700 dark:text-slate-300 mb-4 transition-colors">
             React components re-render when their state or props change, or when their parent component re-renders. 
             Understanding when and why re-renders occur is crucial for building performant React applications.

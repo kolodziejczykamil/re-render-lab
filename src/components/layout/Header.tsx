@@ -62,8 +62,15 @@ export function Header() {
           <div className="flex items-center gap-3">
             <div className="text-2xl">⚛️</div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-white transition-colors">React Re-render Simulator</h1>
-              <p className="text-sm text-slate-600 dark:text-slate-400 transition-colors">Visualize component lifecycle</p>
+              <div className="flex items-center gap-2 mb-1">
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white transition-colors">React Re-render Simulator</h1>
+                <span className="px-2 py-0.5 text-xs font-medium bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded border border-indigo-200 dark:border-indigo-800">
+                  Built for React developers
+                </span>
+              </div>
+              <p className="text-sm text-slate-600 dark:text-slate-400 transition-colors">
+                Visualize and optimize React component re-renders.
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-4">

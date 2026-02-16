@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { calculatePerformanceMetrics } from '../metrics';
-import type { RenderEvent } from '../../types';
+import type { RenderEvent, ComponentAnalysis } from '../../types';
 
 describe('calculatePerformanceMetrics', () => {
   describe('empty render events', () => {
@@ -51,51 +51,155 @@ describe('calculatePerformanceMetrics', () => {
         { id: 1, type: 'initial', avoidable: false, duration: 0, reason: 'Mount', timestamp: 0 },
         { id: 2, type: 'prop', avoidable: false, duration: 50, reason: 'Prop change', timestamp: 100 },
       ];
-      const metrics = calculatePerformanceMetrics(events);
+      const analysis: ComponentAnalysis = {
+        hasInlineArrowFunctions: false,
+        hasInlineObjectLiterals: false,
+        hasInlineArrayLiterals: false,
+        hasUseEffectWithoutDeps: false,
+        hasUseEffectWithDeps: false,
+        useEffectDeps: [],
+        hasReactMemo: false,
+        stateHooksCount: 0,
+        stateHookNames: [],
+        hasPropsDestructuring: false,
+        isValid: true,
+      };
+      const metrics = calculatePerformanceMetrics(events, analysis);
       expect(metrics.optimizationScore).toBe(100);
     });
 
-    it('should decrease score for avoidable renders', () => {
+    it('should decrease score by 15 per avoidable render', () => {
       const events: RenderEvent[] = [
         { id: 1, type: 'initial', avoidable: false, duration: 0, reason: 'Mount', timestamp: 0 },
         { id: 2, type: 'parent', avoidable: true, duration: 100, reason: 'Parent re-render', timestamp: 100 },
-        { id: 3, type: 'parent', avoidable: true, duration: 100, reason: 'Parent re-render', timestamp: 200 },
       ];
-      const metrics = calculatePerformanceMetrics(events);
-      // 2/3 avoidable = 66.7% ratio, so score should be reduced
-      expect(metrics.optimizationScore).toBeLessThan(100);
+      const analysis: ComponentAnalysis = {
+        hasInlineArrowFunctions: false,
+        hasInlineObjectLiterals: false,
+        hasInlineArrayLiterals: false,
+        hasUseEffectWithoutDeps: false,
+        hasUseEffectWithDeps: false,
+        useEffectDeps: [],
+        hasReactMemo: false,
+        stateHooksCount: 0,
+        stateHookNames: [],
+        hasPropsDestructuring: false,
+        isValid: true,
+      };
+      const metrics = calculatePerformanceMetrics(events, analysis);
+      // 100 - (1 * 15) = 85
+      expect(metrics.optimizationScore).toBe(85);
     });
 
-    it('should decrease score for slow renders', () => {
+    it('should decrease score by 10 for inline arrow functions', () => {
       const events: RenderEvent[] = [
         { id: 1, type: 'initial', avoidable: false, duration: 0, reason: 'Mount', timestamp: 0 },
-        { id: 2, type: 'prop', avoidable: false, duration: 300, reason: 'Prop change', timestamp: 100 },
       ];
-      const metrics = calculatePerformanceMetrics(events);
-      // avgDuration = 150ms, but one render is 300ms, so score should be reduced
-      expect(metrics.optimizationScore).toBeLessThan(100);
+      const analysis: ComponentAnalysis = {
+        hasInlineArrowFunctions: true,
+        hasInlineObjectLiterals: false,
+        hasInlineArrayLiterals: false,
+        hasUseEffectWithoutDeps: false,
+        hasUseEffectWithDeps: false,
+        useEffectDeps: [],
+        hasReactMemo: false,
+        stateHooksCount: 0,
+        stateHookNames: [],
+        isValid: true,
+      };
+      const metrics = calculatePerformanceMetrics(events, analysis);
+      // 100 - 10 = 90
+      expect(metrics.optimizationScore).toBe(90);
     });
 
-    it('should add bonus for memoized parent renders', () => {
+    it('should decrease score by 10 for inline object literals', () => {
       const events: RenderEvent[] = [
         { id: 1, type: 'initial', avoidable: false, duration: 0, reason: 'Mount', timestamp: 0 },
-        { id: 2, type: 'parent', avoidable: false, duration: 100, reason: 'Parent re-render (memoized)', timestamp: 100 },
       ];
-      const metrics = calculatePerformanceMetrics(events);
-      // Should have bonus for proper memoization
-      expect(metrics.optimizationScore).toBeGreaterThan(100);
-      expect(metrics.optimizationScore).toBeLessThanOrEqual(105);
+      const analysis: ComponentAnalysis = {
+        hasInlineArrowFunctions: false,
+        hasInlineObjectLiterals: true,
+        hasInlineArrayLiterals: false,
+        hasUseEffectWithoutDeps: false,
+        hasUseEffectWithDeps: false,
+        useEffectDeps: [],
+        hasReactMemo: false,
+        stateHooksCount: 0,
+        stateHookNames: [],
+        isValid: true,
+      };
+      const metrics = calculatePerformanceMetrics(events, analysis);
+      // 100 - 10 = 90
+      expect(metrics.optimizationScore).toBe(90);
+    });
+
+    it('should decrease score by 15 for useEffect without deps', () => {
+      const events: RenderEvent[] = [
+        { id: 1, type: 'initial', avoidable: false, duration: 0, reason: 'Mount', timestamp: 0 },
+      ];
+      const analysis: ComponentAnalysis = {
+        hasInlineArrowFunctions: false,
+        hasInlineObjectLiterals: false,
+        hasInlineArrayLiterals: false,
+        hasUseEffectWithoutDeps: true,
+        hasUseEffectWithDeps: false,
+        useEffectDeps: [],
+        hasReactMemo: false,
+        stateHooksCount: 0,
+        stateHookNames: [],
+        isValid: true,
+      };
+      const metrics = calculatePerformanceMetrics(events, analysis);
+      // 100 - 15 = 85
+      expect(metrics.optimizationScore).toBe(85);
+    });
+
+    it('should combine all penalties', () => {
+      const events: RenderEvent[] = [
+        { id: 1, type: 'initial', avoidable: false, duration: 0, reason: 'Mount', timestamp: 0 },
+        { id: 2, type: 'parent', avoidable: true, duration: 100, reason: 'Parent re-render', timestamp: 100 },
+      ];
+      const analysis: ComponentAnalysis = {
+        hasInlineArrowFunctions: true,
+        hasInlineObjectLiterals: true,
+        hasInlineArrayLiterals: false,
+        hasUseEffectWithoutDeps: true,
+        hasUseEffectWithDeps: false,
+        useEffectDeps: [],
+        hasReactMemo: false,
+        stateHooksCount: 0,
+        stateHookNames: [],
+        isValid: true,
+      };
+      const metrics = calculatePerformanceMetrics(events, analysis);
+      // 100 - (1 * 15) - 10 - 10 - 15 = 50
+      expect(metrics.optimizationScore).toBe(50);
     });
 
     it('should clamp score between 0 and 100', () => {
       const events: RenderEvent[] = [
         { id: 1, type: 'initial', avoidable: false, duration: 0, reason: 'Mount', timestamp: 0 },
-        { id: 2, type: 'parent', avoidable: true, duration: 1000, reason: 'Parent re-render', timestamp: 100 },
-        { id: 3, type: 'parent', avoidable: true, duration: 1000, reason: 'Parent re-render', timestamp: 200 },
-        { id: 4, type: 'parent', avoidable: true, duration: 1000, reason: 'Parent re-render', timestamp: 300 },
-        { id: 5, type: 'parent', avoidable: true, duration: 1000, reason: 'Parent re-render', timestamp: 400 },
+        { id: 2, type: 'parent', avoidable: true, duration: 100, reason: 'Parent re-render', timestamp: 100 },
+        { id: 3, type: 'parent', avoidable: true, duration: 100, reason: 'Parent re-render', timestamp: 200 },
+        { id: 4, type: 'parent', avoidable: true, duration: 100, reason: 'Parent re-render', timestamp: 300 },
+        { id: 5, type: 'parent', avoidable: true, duration: 100, reason: 'Parent re-render', timestamp: 400 },
+        { id: 6, type: 'parent', avoidable: true, duration: 100, reason: 'Parent re-render', timestamp: 500 },
+        { id: 7, type: 'parent', avoidable: true, duration: 100, reason: 'Parent re-render', timestamp: 600 },
       ];
-      const metrics = calculatePerformanceMetrics(events);
+      const analysis: ComponentAnalysis = {
+        hasInlineArrowFunctions: true,
+        hasInlineObjectLiterals: true,
+        hasInlineArrayLiterals: false,
+        hasUseEffectWithoutDeps: true,
+        hasUseEffectWithDeps: false,
+        useEffectDeps: [],
+        hasReactMemo: false,
+        stateHooksCount: 0,
+        stateHookNames: [],
+        isValid: true,
+      };
+      const metrics = calculatePerformanceMetrics(events, analysis);
+      // Would be negative, but clamped to 0
       expect(metrics.optimizationScore).toBeGreaterThanOrEqual(0);
       expect(metrics.optimizationScore).toBeLessThanOrEqual(100);
     });

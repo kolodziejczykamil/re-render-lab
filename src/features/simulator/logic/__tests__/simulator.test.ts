@@ -6,12 +6,14 @@ describe('simulateRenders', () => {
   const baseAnalysis: ComponentAnalysis = {
     hasInlineArrowFunctions: false,
     hasInlineObjectLiterals: false,
+    hasInlineArrayLiterals: false,
     hasUseEffectWithoutDeps: false,
     hasUseEffectWithDeps: false,
     useEffectDeps: [],
     hasReactMemo: false,
     stateHooksCount: 0,
     stateHookNames: [],
+    hasPropsDestructuring: false,
     isValid: true,
   };
 
@@ -56,6 +58,7 @@ describe('simulateRenders', () => {
     it('should trigger render on state change', () => {
       const analysis: ComponentAnalysis = {
         ...baseAnalysis,
+        hasInlineArrayLiterals: false,
         stateHooksCount: 1,
         stateHookNames: ['count'],
       };
@@ -72,6 +75,7 @@ describe('simulateRenders', () => {
     it('should use first state hook name if key not provided', () => {
       const analysis: ComponentAnalysis = {
         ...baseAnalysis,
+        hasInlineArrayLiterals: false,
         stateHooksCount: 1,
         stateHookNames: ['value'],
       };
@@ -98,6 +102,7 @@ describe('simulateRenders', () => {
     it('should NOT trigger render when memoized', () => {
       const analysis: ComponentAnalysis = {
         ...baseAnalysis,
+        hasInlineArrayLiterals: false,
         hasReactMemo: true,
       };
       const scenarios: ScenarioEvent[] = [
@@ -111,6 +116,7 @@ describe('simulateRenders', () => {
     it('should mark as avoidable when inline functions/objects present', () => {
       const analysis: ComponentAnalysis = {
         ...baseAnalysis,
+        hasInlineArrayLiterals: false,
         hasInlineArrowFunctions: true,
       };
       const scenarios: ScenarioEvent[] = [
@@ -126,6 +132,7 @@ describe('simulateRenders', () => {
     it('should trigger avoidable render when useEffect has no deps', () => {
       const analysis: ComponentAnalysis = {
         ...baseAnalysis,
+        hasInlineArrayLiterals: false,
         hasUseEffectWithoutDeps: true,
       };
       const scenarios: ScenarioEvent[] = [
@@ -141,6 +148,7 @@ describe('simulateRenders', () => {
     it('should trigger non-avoidable render when useEffect has deps', () => {
       const analysis: ComponentAnalysis = {
         ...baseAnalysis,
+        hasInlineArrayLiterals: false,
         hasUseEffectWithDeps: true,
       };
       const scenarios: ScenarioEvent[] = [

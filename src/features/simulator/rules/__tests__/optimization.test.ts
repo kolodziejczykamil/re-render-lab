@@ -6,12 +6,14 @@ describe('generateOptimizationSuggestions', () => {
   const baseAnalysis: ComponentAnalysis = {
     hasInlineArrowFunctions: false,
     hasInlineObjectLiterals: false,
+    hasInlineArrayLiterals: false,
     hasUseEffectWithoutDeps: false,
     hasUseEffectWithDeps: false,
     useEffectDeps: [],
     hasReactMemo: false,
     stateHooksCount: 0,
     stateHookNames: [],
+    hasPropsDestructuring: false,
     isValid: true,
   };
 
