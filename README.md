@@ -8,7 +8,7 @@ A production-grade web application for visualizing and understanding React compo
 - **Scenario Builder**: Create custom render scenarios (prop changes, state updates, parent re-renders, effects)
 - **Static Code Analysis**: Detects inline functions, inline objects, useEffect patterns, React.memo usage, and state hooks
 - **Simulation Engine**: Heuristic-based simulation of component re-renders (not a real React runtime)
-- **Optimization Suggestions**: AI-powered recommendations to improve component performance
+- **Optimization Suggestions**: Rule-based recommendations to improve component performance
 - **Performance Metrics**: Track total renders, avoidable renders, average duration, and optimization score
 - **Interactive Timeline**: Visualize render events with color-coded status indicators
 
